@@ -1,4 +1,4 @@
-HabboFans CMS - AOS-inspirierter Style
+Leag CMS - AOS-inspirierter Style
 
 Installation:
 1. Dateien auf den Webspace laden.
