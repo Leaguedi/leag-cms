@@ -1,0 +1,7 @@
+RewriteEngine On
+
+# News Friendly URL
+RewriteRule ^news/([a-zA-Z0-9-]+)/?$ news.php?slug=$1 [L,QSA]
+
+# Seiten Friendly URL
+RewriteRule ^seite/([a-zA-Z0-9-]+)/?$ page.php?slug=$1 [L,QSA]

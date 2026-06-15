@@ -82,7 +82,7 @@ render_header('Home');
 
                 <a
                     class="btn"
-                    href="/news.php?slug=<?= e($item['slug']) ?>"
+                    href="/news/<?= e($item['slug']) ?>"
                 >
                     Lesen
                 </a>
