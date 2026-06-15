@@ -53,7 +53,7 @@ render_header('Home');
 <section class="feature-grid">
     <article class="card feature-card"><span class="badge">Gameplay</span><h3>Events & Aktionen</h3><p>Nutze Seiten oder News für Events, Gewinnspiele, Updates und Community-Ankündigungen.</p></article>
     <article class="card feature-card"><span class="badge">Team</span><h3>Team & Support</h3><p>Baue eine Teamseite mit Rängen, Aufgaben und Ansprechpartnern.</p></article>
-    <article class="card feature-card"><span class="badge">Radio</span><h3>Radio / Widgets</h3><p>Füge später Radio, Discord, Serverstatus oder Shoutbox als Widget hinzu.</p></article>
+    <article class="card feature-card"><span class="badge">Radio</span><h3>Widgets</h3><p>Discord, Serverstatus oder Shoutbox als Widget hinzu.</p></article>
     <article class="card feature-card"><span class="badge">Admin</span><h3>Einfach verwalten</h3><p>News, Seiten und Nutzer bleiben direkt im Adminpanel bearbeitbar.</p></article>
 </section>
 <?php render_footer(); ?>
