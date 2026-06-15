@@ -119,6 +119,10 @@ render_header('Admin Dashboard');
                     <a class="btn secondary" href="/admin/roles.php">Ränge & Rechte</a>
                 <?php endif; ?>
 
+                <?php if (has_permission('media.manage')): ?>
+                    <a class="btn secondary" href="/admin/media.php">Medienmanager</a>
+                <?php endif; ?>
+
                 <?php if (has_permission('settings.manage')): ?>
                     <a class="btn secondary" href="/admin/settings.php">Einstellungen</a>
                 <?php endif; ?>
