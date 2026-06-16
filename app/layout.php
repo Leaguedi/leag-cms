@@ -3,7 +3,11 @@
 function render_header(string $title = ''): void {
 
     $config = require __DIR__ . '/config.php';
-    $site = $config['site_name'];
+    require_once __DIR__ . '/settings.php';
+    $site = setting(
+        'site_name',
+        $config['site_name']
+    );
 
     $user = function_exists('current_user')
         ? current_user()
@@ -182,7 +186,10 @@ function render_footer(): void {
 <footer class="footer">
     <div class="wrap">
         © <?= date('Y') ?>
-        LEAG CMS · Modernes PHP 8 Community CMS
+        <?= e(setting(
+            'footer_text',
+            'LEAG CMS'
+        )) ?>
     </div>
 </footer>
 

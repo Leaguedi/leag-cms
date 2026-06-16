@@ -21,22 +21,46 @@ render_header('Home');
 
 <section class="hero">
     <div>
-        <span class="badge">Community Projekt</span>
-
-        <h1>Deine moderne Leag CMS</h1>
-
+        <?php if (setting('hero_badge')): ?>
+            <span class="badge">
+                <?= e(setting('hero_badge')) ?>
+            </span>
+        <?php endif; ?>
+        <h1>
+            <?= e(setting(
+                'hero_title',
+                'Willkommen'
+            )) ?>
+        </h1>
         <p>
-            Ein dunkler, moderner Landingpage-Look mit großem Hero-Bereich,
-            klarer Navigation, Community-Boxen und News — inspiriert vom Aufbau
-            moderner RP-/Gaming-Projektseiten.
+            <?= e(setting(
+                'hero_text',
+                'Beschreibung fehlt.'
+            )) ?>
         </p>
-
         <div class="hero-actions">
-            <?php if (!current_user()): ?>
-                <a class="btn" href="/register.php">Jetzt registrieren</a>
+            <?php if (
+                setting('hero_button_text')
+                && setting('hero_button_url')
+            ): ?>
+                <a
+                    class="btn"
+                    href="<?= e(setting('hero_button_url')) ?>"
+                >
+                    <?= e(setting('hero_button_text')) ?>
+                </a>
             <?php endif; ?>
-
-            <a class="btn secondary" href="/page.php?slug=team">Mehr erfahren</a>
+            <?php if (
+                setting('hero_second_button_text')
+                && setting('hero_second_button_url')
+            ): ?>
+                <a
+                    class="btn secondary"
+                    href="<?= e(setting('hero_second_button_url')) ?>"
+                >
+                    <?= e(setting('hero_second_button_text')) ?>
+                </a>
+            <?php endif; ?>
         </div>
     </div>
 </section>
