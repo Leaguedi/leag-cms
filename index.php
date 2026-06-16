@@ -19,7 +19,24 @@ $news = $stmt->fetchAll();
 render_header('Home');
 ?>
 
-<section class="hero">
+<section
+    class="hero"
+    style="
+        background:
+        linear-gradient(
+            90deg,
+            rgba(7,11,10,.94),
+            rgba(7,11,10,.70),
+            rgba(7,11,10,.35)
+        ),
+        url('<?= e(setting(
+            'hero_background',
+            '/assets/img/hero-bg.svg'
+        )) ?>');
+        background-size:cover;
+        background-position:center;
+    "
+>
     <div>
         <?php if (setting('hero_badge')): ?>
             <span class="badge">

@@ -8,9 +8,7 @@ require_permission('settings.manage');
 $db = db();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     foreach ($_POST['settings'] ?? [] as $key => $value) {
-
         $stmt = $db->prepare("
             INSERT INTO settings (`key`, `value`)
             VALUES (?, ?)
@@ -36,9 +34,7 @@ render_header('Einstellungen');
     <h1>Einstellungen</h1>
 
     <?php if (isset($_GET['saved'])): ?>
-        <div class="notice">
-            Einstellungen gespeichert.
-        </div>
+        <div class="notice">Einstellungen gespeichert.</div>
     <?php endif; ?>
 
     <form method="POST">
@@ -63,6 +59,47 @@ render_header('Einstellungen');
 
         <hr>
 
+        <h2>Branding</h2>
+
+        <label>Logo URL</label>
+        <input
+            name="settings[site_logo]"
+            value="<?= e(setting('site_logo')) ?>"
+            placeholder="/uploads/media/logo.png"
+        >
+
+        <label>Favicon URL</label>
+        <input
+            name="settings[favicon]"
+            value="<?= e(setting('favicon')) ?>"
+            placeholder="/uploads/media/favicon.png"
+        >
+
+        <label>Apple Touch Icon</label>
+        <input
+            name="settings[apple_touch_icon]"
+            value="<?= e(setting('apple_touch_icon')) ?>"
+            placeholder="/uploads/media/apple-icon.png"
+        >
+
+        <a
+            href="/admin/media.php"
+            class="btn secondary"
+            target="_blank"
+            style="margin-bottom:20px;"
+        >
+            Medienmanager öffnen
+        </a>
+
+        <label>Hero Hintergrund</label>
+        <input
+            name="settings[hero_background]"
+            value="<?= e(setting('hero_background')) ?>"
+            placeholder="/uploads/media/background.jpg"
+        >
+
+        <hr>
+
         <h2>Hero Bereich</h2>
 
         <label>Badge</label>
@@ -78,9 +115,7 @@ render_header('Einstellungen');
         >
 
         <label>Beschreibung</label>
-        <textarea
-            name="settings[hero_text]"
-        ><?= e(setting('hero_text')) ?></textarea>
+        <textarea name="settings[hero_text]"><?= e(setting('hero_text')) ?></textarea>
 
         <label>Button Text</label>
         <input
@@ -108,9 +143,7 @@ render_header('Einstellungen');
 
         <br><br>
 
-        <button type="submit">
-            Speichern
-        </button>
+        <button type="submit">Speichern</button>
 
     </form>
 
