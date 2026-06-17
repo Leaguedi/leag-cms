@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../app/auth.php';
 require_once __DIR__ . '/../app/layout.php';
+require_once __DIR__ . '/../app/activity.php';
 
 require_permission('roles.manage');
 
@@ -26,6 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $name,
                 $slug
             ]);
+
+            activity_log(
+                'role.create',
+                'Rolle erstellt: ' . $name
+            );
         }
     }
 
@@ -33,6 +39,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['save_permissions'])) {
 
         $roleId = (int)($_POST['role_id'] ?? 0);
+
+        $roleStmt = $db->prepare("
+            SELECT name
+            FROM roles
+            WHERE id = ?
+            LIMIT 1
+        ");
+        $roleStmt->execute([$roleId]);
+        $roleInfo = $roleStmt->fetch();
 
         // Alte Rechte löschen
         $stmt = $db->prepare("
@@ -56,6 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 (int)$permissionId
             ]);
         }
+
+        activity_log(
+            'role.permissions.update',
+            'Rechte geändert für Rolle: ' . ($roleInfo['name'] ?? 'Unbekannt')
+        );
     }
 
     header('Location: /admin/roles.php');

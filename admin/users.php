@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../app/auth.php';
 require_once __DIR__ . '/../app/layout.php';
+require_once __DIR__ . '/../app/activity.php';
 
 require_permission('users.manage');
 
@@ -13,6 +14,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($userId > 0) {
         $stmt = $db->prepare("UPDATE users SET role_id = ? WHERE id = ?");
         $stmt->execute([$roleId, $userId]);
+        $userInfo = $db->prepare("
+            SELECT username
+            FROM users
+            WHERE id = ?
+        ");
+        $userInfo->execute([$userId]);
+        $userInfo = $userInfo->fetch();
+
+        $roleInfo = $db->prepare("
+            SELECT name
+            FROM roles
+            WHERE id = ?
+        ");
+        $roleInfo->execute([$roleId]);
+        $roleInfo = $roleInfo->fetch();
+
+        activity_log(
+            'user.role.change',
+            'Benutzer "' .
+            ($userInfo['username'] ?? 'Unbekannt') .
+            '" erhielt Rolle "' .
+            ($roleInfo['name'] ?? 'Unbekannt') .
+            '"'
+        );
     }
 
     header('Location: /admin/users.php');

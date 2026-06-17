@@ -90,6 +90,12 @@ function render_header(string $title = ''): void {
                                 <a href="/admin/media.php">Medienmanager</a>
                             <?php endif; ?>
 
+                            <?php if (has_permission('activity.view')): ?>
+                                <a href="/admin/activity.php">
+                                    Aktivitäten (Logs)
+                                </a>
+                            <?php endif; ?>
+
                             <?php if (has_permission('navigation.manage')): ?>
                                 <a href="/admin/navigation.php">Navigation</a>
                             <?php endif; ?>

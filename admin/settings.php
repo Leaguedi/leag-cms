@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../app/auth.php';
 require_once __DIR__ . '/../app/layout.php';
 require_once __DIR__ . '/../app/settings.php';
+require_once __DIR__ . '/../app/activity.php';
 
 require_permission('settings.manage');
 
@@ -21,6 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             trim($value)
         ]);
     }
+
+    activity_log(
+        'settings.save',
+        'Einstellungen geändert'
+    );
 
     header('Location: /admin/settings.php?saved=1');
     exit;

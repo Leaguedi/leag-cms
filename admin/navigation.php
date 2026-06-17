@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../app/auth.php';
 require_once __DIR__ . '/../app/layout.php';
+require_once __DIR__ . '/../app/activity.php';
 
 require_permission('navigation.manage');
 
@@ -14,14 +15,26 @@ $db = db();
 
 if (isset($_GET['delete'])) {
 
+    $id = (int)$_GET['delete'];
+
+    $stmt = $db->prepare("
+        SELECT title
+        FROM navigation
+        WHERE id = ?
+    ");
+    $stmt->execute([$id]);
+    $deletedItem = $stmt->fetch();
+
     $stmt = $db->prepare("
         DELETE FROM navigation
         WHERE id = ?
     ");
+    $stmt->execute([$id]);
 
-    $stmt->execute([
-        (int)$_GET['delete']
-    ]);
+    activity_log(
+        'navigation.delete',
+        'Navigationseintrag gelöscht: ' . ($deletedItem['title'] ?? 'Unbekannt')
+    );
 
     header('Location: /admin/navigation.php');
     exit;
@@ -66,6 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id
         ]);
 
+        activity_log(
+            'navigation.edit',
+            'Navigation geändert: ' . $title
+        );
+
     } else {
 
         $stmt = $db->prepare("
@@ -84,6 +102,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $sortOrder,
             $visible
         ]);
+
+        activity_log(
+            'navigation.create',
+            'Navigation erstellt: ' . $title
+        );
     }
 
     header('Location: /admin/navigation.php');

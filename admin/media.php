@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../app/auth.php';
 require_once __DIR__ . '/../app/layout.php';
+require_once __DIR__ . '/../app/activity.php';
 
 require_permission('media.manage');
 
@@ -38,6 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
                 $message = 'Bild erfolgreich hochgeladen.';
+                activity_log(
+                    'media.upload',
+                    'Bild hochgeladen: ' . $filename
+                );
             } else {
                 $error = 'Upload fehlgeschlagen.';
             }

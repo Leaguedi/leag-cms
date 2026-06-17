@@ -1,8 +1,16 @@
 <?php
 require_once __DIR__ . '/../app/auth.php';
 require_once __DIR__ . '/../app/layout.php';
+require_once __DIR__ . '/../app/activity.php';
 
-require_permission('news.manage');
+if (
+    !has_permission('news.create') &&
+    !has_permission('news.edit') &&
+    !has_permission('news.delete')
+) {
+    http_response_code(403);
+    exit('Kein Zugriff.');
+}
 
 $db = db();
 
@@ -42,9 +50,26 @@ if (
         WHERE id = ?
     ");
 
+    $logNews = $db->prepare("
+        SELECT title
+        FROM news
+        WHERE id = ?
+    ");
+
+    $logNews->execute([
+        (int)$_GET['delete']
+    ]);
+
+    $logNews = $logNews->fetch();
+
     $stmt->execute([
         (int)$_GET['delete']
     ]);
+
+    activity_log(
+        'news.delete',
+        'News gelöscht: ' . ($logNews['title'] ?? 'Unbekannt')
+    );
 
     header('Location: /admin/news.php');
     exit;
@@ -130,6 +155,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id
         ]);
 
+        activity_log(
+            'news.edit',
+            'News bearbeitet: ' . $title
+        );
+
     } else {
 
         require_permission('news.create');
@@ -158,6 +188,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $published,
             current_user()['id']
         ]);
+        activity_log(
+        'news.create',
+        'News erstellt: ' . $title
+        );
     }
 
     header('Location: /admin/news.php');

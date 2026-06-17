@@ -26,6 +26,16 @@ $latestNews = $db->query("
     LIMIT 5
 ")->fetchAll();
 
+$latestActivities = $db->query("
+    SELECT 
+        l.*,
+        u.username
+    FROM activity_logs l
+    LEFT JOIN users u ON u.id = l.user_id
+    ORDER BY l.created_at DESC
+    LIMIT 8
+")->fetchAll();
+
 render_header('Admin Dashboard');
 ?>
 
@@ -60,6 +70,30 @@ render_header('Admin Dashboard');
 
 <div class="grid">
     <div>
+        <div class="card">
+            <h2>Letzte Aktivitäten</h2>
+
+            <?php if (!$latestActivities): ?>
+                <p class="meta">Noch keine Aktivitäten vorhanden.</p>
+            <?php else: ?>
+                <?php foreach ($latestActivities as $activity): ?>
+                    <div class="dashboard-list-item">
+                        <div>
+                            <strong><?= e($activity['description'] ?: $activity['action']) ?></strong>
+                            <small>
+                                <?= e($activity['username'] ?: 'System') ?>
+                                · <?= e($activity['action']) ?>
+                            </small>
+                        </div>
+
+                        <span>
+                            <?= e(date('d.m.Y H:i', strtotime($activity['created_at']))) ?>
+                        </span>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+
         <div class="card">
             <h2>Letzte Registrierungen</h2>
 
@@ -123,6 +157,10 @@ render_header('Admin Dashboard');
                     <a class="btn secondary" href="/admin/media.php">Medienmanager</a>
                 <?php endif; ?>
 
+                <?php if (has_permission('navigation.manage')): ?>
+                    <a class="btn secondary" href="/admin/navigation.php">Navigation</a>
+                <?php endif; ?>
+
                 <?php if (has_permission('settings.manage')): ?>
                     <a class="btn secondary" href="/admin/settings.php">Einstellungen</a>
                 <?php endif; ?>
@@ -132,6 +170,8 @@ render_header('Admin Dashboard');
                     !has_permission('pages.create') &&
                     !has_permission('users.manage') &&
                     !has_permission('roles.manage') &&
+                    !has_permission('media.manage') &&
+                    !has_permission('navigation.manage') &&
                     !has_permission('settings.manage')
                 ): ?>
                     <p class="meta">Keine Schnellaktionen verfügbar.</p>
